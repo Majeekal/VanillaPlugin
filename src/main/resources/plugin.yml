@@ -1,0 +1,100 @@
+name: VanillaPlugin
+main: com.sbezboro.standardplugin.VanillaPlugin
+version: 2.6.10
+softdepend: [SimplyVanish, Essentials, Factions]
+api-version: 1.16
+
+commands:
+    vanilla:
+        description: Base command
+        permission: vanillaplugin.vanilla
+        permission-message: You don't have permission
+    rank:
+        description: Check out your rank on the website
+        permission: vanillaplugin.rank
+        permission-message: You don't have permission
+    unfreeze:
+        description: Use this command to unfreeze yourself
+        permission: vanillaplugin.unfreeze
+        permission-message: You don't have permission
+        aliases: [u]
+    spawn:
+        description: See the coordinates of the various spawn areas
+        permission: vanillaplugin.spawn
+        permission-message: You don't have permission
+        aliases: [spawns, spawncoords]
+    gate:
+        description: Set up gates
+        permission: vanillaplugin.gate
+        permission-message: You don't have permission
+    setspawn:
+        description: Set spawn
+        permission: vanillaplugin.setspawn
+        permission-message: You don't have permission
+    enablepvp:
+        description: Disable your PVP protection early
+        permission: vanillaplugin.enablepvp
+        permission-message: You don't have permission
+    pvp:
+        description: Query/enable/disable pvp protection for players
+        permission: vanillaplugin.pvp
+        permission-message: You don't have permission
+    sstitle:
+        description: Administrate player titles
+        permission: vanillaplugin.sstitle
+        permission-message: You don't have permission
+    titles:
+        description: Check out titles for a player
+        permission: vanillaplugin.titles
+        permission-message: You don't have permission
+    end:
+        description: End reset tools
+        permission: vanillaplugin.end
+        permission-message: You don't have permission
+    clearbed:
+        description: Clears your bed spawn for when you cant break the bed
+        permission: vanillaplugin.clearbed
+        permission-message: You don't have permission
+        aliases: [resetbed, resetspawn]
+    honeypot:
+        description: Honeypot administration
+        permission: vanillaplugin.honeypot
+        permission-message: You don't have permission
+    endreset:
+        description: Find out when the next end reset is
+        permission: vanillaplugin.endreset
+        permission-message: You don't have permission
+
+permissions:
+    vanillaplugin.vanilla:
+        default: op
+    vanillaplugin.register:
+        default: true
+    vanillaplugin.rank:
+        default: true
+    vanillaplugin.unfreeze:
+        default: true
+    vanillaplugin.spawn:
+        default: true
+    vanillaplugin.gate:
+        default: op
+    vanillaplugin.setspawn:
+        default: op
+    vanillaplugin.enablepvp:
+        default: true
+    vanillaplugin.pvp:
+        default: op
+    vanillaplugin.title:
+        default: op
+    vanillaplugin.titles:
+        default: true
+    vanillaplugin.end:
+        default: op
+    vanillaplugin.clearbed:
+        default: true
+    vanillaplugin.honeypot:
+        default: op
+    vanillaplugin.endreset:
+        default: true
+    vanillaplugin.moderator:
+        default: op
