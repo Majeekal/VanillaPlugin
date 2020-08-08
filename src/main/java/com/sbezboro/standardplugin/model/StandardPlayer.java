@@ -26,6 +26,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 
 import java.net.InetSocketAddress;
@@ -33,8 +34,7 @@ import java.util.*;
 
 public class StandardPlayer extends PlayerDelegate {
 	private static final int PVP_TIMER_TIME = 600;  // 30 seconds
-	
-	private PersistedProperty<Boolean> forumMuted;
+
 	private PersistedProperty<Boolean> pvpProtection;
 	private PersistedProperty<PersistableLocation> bedLocation;
 	private PersistedListProperty<String> titleNames;
@@ -45,11 +45,12 @@ public class StandardPlayer extends PlayerDelegate {
 
 	private List<Title> titles;
 
-	private int timeSpent;
+	private int pvpTimeSpent;
+	private int hungerTimeSpent;
 	private int rank;
 
 	private int newbieAttacks;
-	
+
 	private PvpTimerTask pvpTimerTask;
 	private String lastAttackerUuid;
 
@@ -69,7 +70,6 @@ public class StandardPlayer extends PlayerDelegate {
 
 	@Override
 	public void createProperties() {
-		forumMuted = createProperty(Boolean.class, "forum-muted");
 		pvpProtection = createProperty(Boolean.class, "pvp-protection");
 		bedLocation = createProperty(PersistableLocation.class, "bed");
 		titleNames = createList(String.class, "titles");
@@ -226,21 +226,8 @@ public class StandardPlayer extends PlayerDelegate {
 	// ------
 	// Persisted property mutators
 	// ------
-	public Boolean isForumMuted() {
-		return forumMuted.getValue();
-	}
-
-	public void setForumMuted(boolean forumMuted) {
-		this.forumMuted.setValue(forumMuted);
-	}
-
-	public boolean toggleForumMute() {
-		setForumMuted(!isForumMuted());
-		return isForumMuted();
-	}
-
 	public boolean isHungerProtected() {
-		return timeSpent <= VanillaPlugin.getPlugin().getHungerProtectionTime();
+		return hungerTimeSpent <= VanillaPlugin.getPlugin().getHungerProtectionTime();
 	}
 
 	public Boolean isPvpProtected() {
@@ -249,10 +236,27 @@ public class StandardPlayer extends PlayerDelegate {
 
 	public void setPvpProtection(boolean pvpProtection) {
 		this.pvpProtection.setValue(pvpProtection);
+
+		if(pvpProtection){
+			new BukkitRunnable() {
+				int count = 1;
+
+				@Override
+				public void run() {
+					if(count >= VanillaPlugin.getPlugin().getPvpProtectionTime() || !isPvpProtected()){
+						pvpTimeSpent = 0;
+						cancel();
+					} else {
+						pvpTimeSpent = count;
+						count++;
+					}
+				}
+			}.runTaskTimer(VanillaPlugin.getPlugin(), 20L * 60, 20L * 60);
+		}
 	}
 
 	public int getPvpProtectionTimeRemaining() {
-		return Math.max(VanillaPlugin.getPlugin().getPvpProtectionTime() - timeSpent, 0);
+		return Math.max(VanillaPlugin.getPlugin().getPvpProtectionTime() - pvpTimeSpent, 0);
 	}
 
 	public void saveBedLocation(Location location) {
@@ -382,12 +386,20 @@ public class StandardPlayer extends PlayerDelegate {
 	// ------
 	// Non-persisted property mutators
 	// ------
-	public int getTimeSpent() {
-		return timeSpent;
+	public int getHungerTimeSpent() {
+		return hungerTimeSpent;
 	}
 
-	public void setTimeSpent(int timeSpent) {
-		this.timeSpent = timeSpent;
+	public void setHungerTimeSpent(int hungerTimeSpent) {
+		this.hungerTimeSpent = hungerTimeSpent;
+	}
+
+	public int getPvpTimeSpent() {
+		return pvpTimeSpent;
+	}
+
+	public void setPvpTimeSpent(int pvpTimeSpent) {
+		this.pvpTimeSpent = pvpTimeSpent;
 	}
 
 	public int getRank() {
@@ -639,7 +651,8 @@ public class StandardPlayer extends PlayerDelegate {
 		}
 
 		info.put("rank", getRank());
-		info.put("time_spent", getTimeSpent());
+		info.put("pvp_time_spent", getPvpTimeSpent());
+		info.put("hunger_time_spent", getHungerTimeSpent());
 
 		info.put("is_pvp_protected", isPvpProtected());
 		info.put("is_hunger_protected", isHungerProtected());

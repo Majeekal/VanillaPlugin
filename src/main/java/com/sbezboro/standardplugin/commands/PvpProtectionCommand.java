@@ -14,7 +14,7 @@ public class PvpProtectionCommand extends BaseCommand {
 
 	@Override
 	public boolean handle(CommandSender sender, Command command, String label, String[] args) {
-		if (args.length == 0 || args.length > 2) {
+		if (args.length == 0 || args.length > 3) {
 			showUsageInfo(sender);
 			return false;
 		}

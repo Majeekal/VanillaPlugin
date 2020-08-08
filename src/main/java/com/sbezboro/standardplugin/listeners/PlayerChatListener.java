@@ -1,7 +1,9 @@
 package com.sbezboro.standardplugin.listeners;
 
 import com.sbezboro.standardplugin.VanillaPlugin;
+import com.sbezboro.standardplugin.integrations.EssentialsIntegration;
 import com.sbezboro.standardplugin.model.StandardPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -65,7 +67,7 @@ public class PlayerChatListener extends EventListener implements Listener {
 									ChatColor.DARK_AQUA + ", need help with our custom plugin " +
 									ChatColor.ITALIC + "Groups" + ChatColor.DARK_AQUA + "?",
 							ChatColor.DARK_AQUA + "Try clicking on this link: " + ChatColor.UNDERLINE +
-									"standardsurvival.com/help"
+									"https://discord.gg/uKTfPqV"
 					}),
 
 			new AutoHelpTopic("PVP protection",
@@ -86,7 +88,7 @@ public class PlayerChatListener extends EventListener implements Listener {
 					new String[]{
 							ChatColor.DARK_AQUA + "Hey " + ChatColor.BOLD + PLAYER_NAME_REPLACE +
 									ChatColor.DARK_AQUA + ", need help? Try clicking on this link:",
-							String.valueOf(ChatColor.DARK_AQUA) + ChatColor.UNDERLINE + "standardsurvival.com/help"
+							String.valueOf(ChatColor.DARK_AQUA) + ChatColor.UNDERLINE + "https://discord.gg/uKTfPqV"
 					})};
 
 	public PlayerChatListener(VanillaPlugin plugin) {
@@ -98,15 +100,6 @@ public class PlayerChatListener extends EventListener implements Listener {
 		StandardPlayer player = plugin.getStandardPlayer(event.getPlayer());
 
 		String message = event.getMessage();
-
-		if (player.getTimeSpent() < 600) {
-			for (int i = 0; i < helpTopics.length; i++) {
-				if (helpTopics[i].matches(message)) {
-					helpTopics[i].sendHelpMessage(player);
-					return;
-				}
-			}
-		}
 
 		if (plugin.shouldBlockMessage(message)) {
 			player.sendMessage(ChatColor.RED + "You used a blocked word");

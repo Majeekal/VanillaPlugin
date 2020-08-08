@@ -5,6 +5,8 @@ import com.earth2me.essentials.User;
 import com.sbezboro.standardplugin.VanillaPlugin;
 import com.sbezboro.standardplugin.model.StandardPlayer;
 
+import java.util.UUID;
+
 public class EssentialsIntegration extends PluginIntegration {
 	private static final String CLASS_NAME = "com.earth2me.essentials.IEssentials";
 	private static final String PLUGIN_NAME = "Essentials";
@@ -14,11 +16,15 @@ public class EssentialsIntegration extends PluginIntegration {
 		essentials = init(plugin, CLASS_NAME, PLUGIN_NAME);
 	}
 
-	public static User getUser(StandardPlayer player) {
-		if (!enabled) {
-			return null;
+	public static User getUserByUUID(UUID uuid) {
+		if (essentials == null) {
+			throw new RuntimeException("Essentials API is called before Essentials is loaded.");
 		}
-		return essentials.getUser(player.getUniqueId());
+		if (uuid == null) {
+			throw new IllegalArgumentException("Economy uuid cannot be null");
+		}
+
+		return essentials.getUser(uuid);
 	}
 
 	public static boolean hasNickname(StandardPlayer player) {
@@ -29,7 +35,7 @@ public class EssentialsIntegration extends PluginIntegration {
 	}
 
 	public static String getNickname(StandardPlayer player) {
-		User user = getUser(player);
+		User user = getUserByUUID(player.getUniqueId());
 		if (user != null) {
 			return user.getNickname();
 		}
@@ -49,20 +55,20 @@ public class EssentialsIntegration extends PluginIntegration {
 
 		return tps;
 	}
-	
+
 	public static boolean isPlayerMuted(StandardPlayer player) {
 		if (!enabled) {
 			return false;
 		}
-		
-		return getUser(player).isMuted();
+
+		return getUserByUUID(player.getUniqueId()).isMuted();
 	}
 
 	public static void setPlayerMuted(StandardPlayer player, boolean muted) {
 		if (!enabled) {
 			return;
 		}
-		getUser(player).setMuted(muted);
+		getUserByUUID(player.getUniqueId()).setMuted(muted);
 	}
 
 	public static boolean doesPlayerIgnorePlayer(StandardPlayer first, StandardPlayer second) {
@@ -74,8 +80,8 @@ public class EssentialsIntegration extends PluginIntegration {
 			return false;
 		}
 
-		User firstUser = getUser(first);
-		User secondUser = getUser(second);
+		User firstUser = getUserByUUID(first.getUniqueId());
+		User secondUser = getUserByUUID(second.getUniqueId());
 
 		return firstUser.isIgnoredPlayer(secondUser);
 	}

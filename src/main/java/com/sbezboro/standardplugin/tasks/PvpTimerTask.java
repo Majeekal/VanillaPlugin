@@ -2,6 +2,7 @@ package com.sbezboro.standardplugin.tasks;
 
 import com.sbezboro.standardplugin.VanillaPlugin;
 import com.sbezboro.standardplugin.model.StandardPlayer;
+import org.bukkit.Bukkit;
 
 public class PvpTimerTask extends BaseTask {
 	private StandardPlayer player;
@@ -12,11 +13,11 @@ public class PvpTimerTask extends BaseTask {
 		this.player = player;
 	}
 
+
 	@Override
 	public void run() {
 		if (player.isOnline()) {
 			player.setNotInPvp();
 		}
 	}
-
 }
