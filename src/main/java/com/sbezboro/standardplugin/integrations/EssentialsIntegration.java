@@ -4,6 +4,7 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.sbezboro.standardplugin.VanillaPlugin;
 import com.sbezboro.standardplugin.model.StandardPlayer;
+import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class EssentialsIntegration extends PluginIntegration {
 		if (essentials == null) {
 			throw new RuntimeException("Essentials API is called before Essentials is loaded.");
 		}
+
 		if (uuid == null) {
 			throw new IllegalArgumentException("Economy uuid cannot be null");
 		}
@@ -31,6 +33,7 @@ public class EssentialsIntegration extends PluginIntegration {
 		if (!enabled) {
 			return false;
 		}
+
 		return getNickname(player) != null;
 	}
 
@@ -40,7 +43,7 @@ public class EssentialsIntegration extends PluginIntegration {
 			return user.getNickname();
 		}
 
-		return player.getDisplayName();
+		return null;
 	}
 
 	public static double getTPS() {
@@ -68,6 +71,7 @@ public class EssentialsIntegration extends PluginIntegration {
 		if (!enabled) {
 			return;
 		}
+
 		getUserByUUID(player.getUniqueId()).setMuted(muted);
 	}
 
