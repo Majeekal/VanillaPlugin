@@ -40,7 +40,7 @@ public class EssentialsIntegration extends PluginIntegration {
 			return user.getNickname();
 		}
 
-		return null;
+		return player.getDisplayName();
 	}
 
 	public static double getTPS() {
