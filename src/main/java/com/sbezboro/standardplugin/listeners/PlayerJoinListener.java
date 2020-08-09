@@ -93,6 +93,10 @@ public class PlayerJoinListener extends EventListener implements Listener {
 				player.setPvpProtection(true);
 			}
 
+			if(plugin.isHungerProtectionEnabled()){
+				player.setHungerProtection(true);
+			}
+
 			player.sendTitleMessage("Welcome, " + player.getDisplayName() + ChatColor.RESET + "!");
 		}
 

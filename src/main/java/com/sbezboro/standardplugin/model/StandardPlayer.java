@@ -35,6 +35,7 @@ import java.util.*;
 public class StandardPlayer extends PlayerDelegate {
 	private static final int PVP_TIMER_TIME = 600;  // 30 seconds
 
+	private PersistedProperty<Boolean> hungerProtection;
 	private PersistedProperty<Boolean> pvpProtection;
 	private PersistedProperty<PersistableLocation> bedLocation;
 	private PersistedListProperty<String> titleNames;
@@ -228,6 +229,31 @@ public class StandardPlayer extends PlayerDelegate {
 	// ------
 	public boolean isHungerProtected() {
 		return hungerTimeSpent <= VanillaPlugin.getPlugin().getHungerProtectionTime();
+	}
+
+	public void setHungerProtection(boolean hungerProtection) {
+		this.hungerProtection.setValue(hungerProtection);
+
+		if(hungerProtection){
+			new BukkitRunnable() {
+				int count = 1;
+
+				@Override
+				public void run() {
+					if(count >= VanillaPlugin.getPlugin().getHungerProtectionTime() || !isHungerProtected()){
+						hungerTimeSpent = 0;
+						cancel();
+					} else {
+						hungerTimeSpent = count;
+						count++;
+					}
+				}
+			}.runTaskTimer(VanillaPlugin.getPlugin(), 20L * 60, 20L * 60);
+		}
+	}
+
+	public int getHungerProtectionTimeRemaining() {
+		return Math.max(VanillaPlugin.getPlugin().getHungerProtectionTime() - hungerTimeSpent, 0);
 	}
 
 	public Boolean isPvpProtected() {

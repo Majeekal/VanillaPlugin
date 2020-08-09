@@ -39,6 +39,10 @@ commands:
         description: Query/enable/disable pvp protection for players
         permission: vanillaplugin.pvp
         permission-message: You don't have permission
+    hunger:
+        description: Query/enable/disable hunger protection for players
+        permission: vanillaplugin.hunger
+        permission-message: You don't have permission
     sstitle:
         description: Administrate player titles
         permission: vanillaplugin.sstitle
